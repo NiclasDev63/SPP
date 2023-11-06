@@ -4,14 +4,14 @@
 #include "image/bitmap_image.h"
 #include "pixel.h"
 
-//TEST
+// TEST
 BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
 {
-    if (!std::filesystem::exists(path))
+    if (!filesystem::exists(path))
     {
-        throw std::exception();
+        throw exception();
     }
-    std::ifstream file(path, std::ios::binary);
+    ifstream file(path, ios::binary);
     if (file.is_open())
     {
         char header[54];
@@ -23,7 +23,7 @@ BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
 
 
         if (width <= 0 || height <= 0 || bfOffBits <= 0) {
-            throw std::runtime_error("Ungültige Datei");
+            throw runtime_error("Ungültige Datei");
         }
 
         BitmapImage image = BitmapImage(height, width);
