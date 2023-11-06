@@ -2,7 +2,7 @@
 #include <fstream>
 #include "image_parser.h"
 #include "image/bitmap_image.h"
-#include "pixel.h"
+#include "image/pixel.h"
 
 // TEST
 BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
@@ -13,7 +13,9 @@ BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
     }
     ifstream file(path, ios::binary);
     if (file.is_open())
-    {
+    {   
+
+        //read in bmp header
         char header[54];
         file.read(header, 54);
 
@@ -28,9 +30,11 @@ BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
 
         BitmapImage image = BitmapImage(height, width);
 
+        char r, g, b;
         for(int i = 0; i < height; i++) {
             for(int j = 0; j < width; j++) {
-                BitmapImage::BitmapPixel pixel = BitmapImage::BitmapPixel(file.get(), 0, 0);
+                file.get(r); file.get(g); file.get(b);
+                BitmapImage::BitmapPixel pixel = BitmapImage::BitmapPixel(r, g, b);
                 image.set_pixel(i, j, pixel);
             }
         }
