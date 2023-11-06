@@ -19,7 +19,7 @@ public:
 	static ChannelOrder channel_order;
 
 	// standard constructor
-    Pixel() : red(0), green(0), blue(0);
+	Pixel() : red(0), green(0), blue(0);
 
 	Pixel(T red, T green, T blue) : red(red), green(green), blue(blue);
 
@@ -29,7 +29,7 @@ public:
 	[[nodiscard]] T get_blue_channel() const noexcept;
 
 	// overload the "==" operator
-	bool operator==(const Pixel &other) const;
+	bool operator==(const Pixel &other) const {}
 
 private:
 	T red;
