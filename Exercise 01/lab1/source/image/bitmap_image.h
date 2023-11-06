@@ -6,6 +6,7 @@
 
 using namespace std;
 
+//TEST
 class BitmapImage
 {
 public:
