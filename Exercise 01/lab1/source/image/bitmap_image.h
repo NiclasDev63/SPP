@@ -6,14 +6,14 @@
 
 using namespace std;
 
-//TEST
+
 class BitmapImage
 {
 public:
     using BitmapPixel = Pixel<uint8_t>;
     using index_type = int16_t;
 
-    BitmapImage(index_type height, index_type width) : height(0), width(0);
+    BitmapImage(index_type height = 0, index_type width = 0);
 
     [[nodiscard]] index_type get_height() const noexcept;
     [[nodiscard]] index_type get_width() const noexcept;

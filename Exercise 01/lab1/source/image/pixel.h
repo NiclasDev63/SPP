@@ -19,9 +19,9 @@ public:
 	static ChannelOrder channel_order;
 
 	// standard constructor
-	Pixel() : red(0), green(0), blue(0);
+	Pixel() : red(0), green(0), blue(0) {}
 
-	Pixel(T red, T green, T blue) : red(red), green(green), blue(blue);
+	Pixel(T color1, T color2, T color3);
 
 	// returns the intensitiy of the respective color
 	[[nodiscard]] T get_red_channel() const noexcept;
