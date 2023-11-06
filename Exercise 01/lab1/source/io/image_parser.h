@@ -7,5 +7,5 @@
 class ImageParser
 {
 public:
-    static BitmapImage read_bitmap(std::filesystem::path path) {}
+    static BitmapImage read_bitmap(std::filesystem::path path);
 };

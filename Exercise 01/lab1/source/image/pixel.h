@@ -29,7 +29,7 @@ public:
 	[[nodiscard]] T get_blue_channel() const noexcept;
 
 	// overload the "==" operator
-	bool operator==(const Pixel &other) const {}
+	bool operator==(const Pixel &other) const;
 
 private:
 	T red;
