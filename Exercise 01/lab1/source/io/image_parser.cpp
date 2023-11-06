@@ -6,7 +6,6 @@
 
 using namespace std;
 
-//testt
 BitmapImage ImageParser::read_bitmap(filesystem::path path)
 {
     if (!filesystem::exists(path))
