@@ -4,6 +4,7 @@
 #include "image/bitmap_image.h"
 #include "pixel.h"
 
+//TEST
 BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
 {
     if (!std::filesystem::exists(path))
