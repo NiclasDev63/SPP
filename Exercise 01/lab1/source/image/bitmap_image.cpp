@@ -26,7 +26,7 @@ void BitmapImage::set_pixel(BitmapImage::index_type x, BitmapImage::index_type y
     return pixels[y][x];
 }
 
-BitmapImage BitmapImage::transpose(BitmapImage original) const
+BitmapImage BitmapImage::transpose(const BitmapImage &original) const
 {
     BitmapImage transposed(width, height);
     for (index_type i = 0; i < height; ++i)
