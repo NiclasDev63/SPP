@@ -22,10 +22,10 @@ public:
 
     [[nodiscard]] BitmapPixel get_pixel(index_type x, index_type y) const;
 
-    BitmapImage transpose(BitmapImage original) const;
+    BitmapImage transpose(const BitmapImage &original) const;
 
 private:
-    bool is_in_picture(int16_t x, int16_t y) const;
+    bool is_in_picture(BitmapImage::index_type x, BitmapImage::index_type y) const;
     index_type height;
     index_type width;
     vector<vector<BitmapPixel>> pixels;
