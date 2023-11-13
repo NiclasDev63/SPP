@@ -6,6 +6,9 @@
 #include <CLI/Config.hpp>
 #include <CLI/Formatter.hpp>
 
+#include <random>
+
+
 int main(int argc, char** argv) {
 	auto lab_cli_app = CLI::App{ "" };
 
@@ -20,16 +23,33 @@ int main(int argc, char** argv) {
 
 	CLI11_PARSE(lab_cli_app, argc, argv);
 
-	auto bitmap_image = ImageParser::read_bitmap(image_path);
+	BitmapImage::BitmapPixel::channel_order = ChannelOrder::RGB;
 
-	auto key = FES::key_type{};
-	for (auto i = FES::key_type::value_type(0); i < key.size(); i++) {
-		key[i] = i;
+	BitmapImage img(500, 500);
+	for (int i = 0; i < 500; i++) {
+		for (int j = 0; j < 500; j++) {
+
+			std::random_device dev;
+			std::mt19937 rng(dev());
+			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 255);
+
+			BitmapImage::BitmapPixel pixel(dist6(rng), dist6(rng), dist6(rng));
+
+			img.set_pixel(i, j, pixel);
+		}
 	}
 
-	auto encrypted_image = FES::encrypt(bitmap_image, key);
+	ImageParser::write_bitmap(image_path, img);
+
+	//auto key = FES::key_type{};
+	//for (auto i = FES::key_type::value_type(0); i < key.size(); i++) {
+	//	key[i] = i;
+	//}
+
+	//auto encrypted_image = FES::encrypt(bitmap_image, key);
 	
-	ImageParser::write_bitmap(output_path / "encrypted_image.bmp", encrypted_image);
+	//ImageParser::write_bitmap(output_path / "encrypted_image.bmp", encrypted_image);
+	//ImageParser::write_bitmap(output_path / "encrypted_image.bmp", encrypted_image);
 
 	return 0;
 }

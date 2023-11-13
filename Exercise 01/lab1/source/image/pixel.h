@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdlib.h>
+#include <vector>
+
 // DO NOT CHANGE THIS ENUM
 enum class ChannelOrder
 {
@@ -19,17 +22,19 @@ public:
 	static ChannelOrder channel_order;
 
 	// standard constructor
-	Pixel() : red(0), green(0), blue(0) {}
+	Pixel(): red(0), green(0), blue(0) {}
 
-	Pixel(T color1, T color2, T color3);
+	Pixel(T red, T green, T blue) : red(red), green(green), blue(blue) {}
 
 	// returns the intensitiy of the respective color
-	[[nodiscard]] T get_red_channel() const noexcept;
-	[[nodiscard]] T get_green_channel() const noexcept;
-	[[nodiscard]] T get_blue_channel() const noexcept;
+	[[nodiscard]] T get_green_channel() const noexcept { return green; };
+	[[nodiscard]] T get_red_channel() const noexcept { return red; };
+	[[nodiscard]] T get_blue_channel() const noexcept { return blue; };
 
 	// overload the "==" operator
-	bool operator==(const Pixel &other) const;
+	bool operator==(const Pixel &other) const {
+        return red == other.red && green == other.green && blue == other.blue;
+    };
 
 private:
 	T red;
