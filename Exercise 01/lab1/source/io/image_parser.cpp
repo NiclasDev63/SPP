@@ -12,40 +12,65 @@ BitmapImage ImageParser::read_bitmap(std::filesystem::path path)
         throw exception();
     }
     ifstream file(path, ios::binary);
-    if (file.is_open())
+
+    if (!file.is_open()) 
     {
-
-        // read in bmp header
-        char header[54];
-        file.read(header, 54);
-
-        int width = *reinterpret_cast<int *>(&header[18]);
-        int height = *reinterpret_cast<int *>(&header[22]);
-        int bfOffBits = *reinterpret_cast<int *>(&header[10]);
-
-        if (width <= 0 || height <= 0 || bfOffBits <= 0)
-        {
-            throw runtime_error("Ungültige Datei");
-        }
-
-        BitmapImage image = BitmapImage(height, width);
-
-        char r, g, b;
-        for (int i = 0; i < height; i++)
-        {
-            for (int j = 0; j < width; j++)
-            {
-                file.get(r);
-                file.get(g);
-                file.get(b);
-                BitmapImage::BitmapPixel pixel = BitmapImage::BitmapPixel(r, g, b);
-                image.set_pixel(i, j, pixel);
-            }
-        }
-        file.close();
-
-        return image;
+        throw exception();
     }
+
+    const int fileHeaderSize = 14;
+    const int informationHeaderSize = 40;
+
+    unsigned char fileHeader[fileHeaderSize];
+    file.read(reinterpret_cast<char*>(fileHeader), fileHeaderSize);
+
+    //Throws exception, if file is not a bitmap image
+    if (fileHeader[0] != 'B' || fileHeader[1] != 'M') {
+        throw exception();
+    }
+
+    int fileSize = fileHeader[2] + (fileHeader[3] << 8) + (fileHeader[4] << 16) + (fileHeader[5] << 24);
+    int bfOffBits = fileHeader[10];
+
+    unsigned char informationHeader[informationHeaderSize];
+    file.read(reinterpret_cast<char*>(informationHeader), informationHeaderSize);
+
+    int width = informationHeader[4] + (informationHeader[5] << 8) + (informationHeader[6] << 16) + (informationHeader[7] << 24);
+    int height = informationHeader[8] + (informationHeader[9] << 8) + (informationHeader[10] << 16) + (informationHeader[11] << 24);
+
+    if (width <= 0 || height <= 0 || bfOffBits <= 0)
+    {
+        throw exception();
+    }
+
+    BitmapImage image(height, width);
+
+    /*
+    * Calculate padding.
+    * There are biWidth amount of pixels per row. Each pixel contains 3 byte (one per color).
+    * Therefore, 4 - (biWidth * 3) % 4 gives back the padding.
+    * If (biWidth * 3) % 4 equals 0, then the padding is 4, which is redundant.
+    * This can be corrected by another % 4, resulting in the formula.
+    */
+    const int padding = ((4 - (width * 3) % 4) % 4);
+
+    //Skips bytes until the image starts
+    file.ignore(bfOffBits - fileHeaderSize - informationHeaderSize);
+
+    unsigned char red, green, blue; 
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            file.read(reinterpret_cast<char*>(&blue), 1);
+            file.read(reinterpret_cast<char*>(&green), 1);
+            file.read(reinterpret_cast<char*>(&red), 1);
+            Pixel pixel(red, green, blue);
+            image.set_pixel(x, y, pixel);
+        }
+        file.ignore(padding);
+    }
+    file.close();
+
+    return image;
 }
 
 void ImageParser::write_bitmap(std::filesystem::path path, const BitmapImage &image)

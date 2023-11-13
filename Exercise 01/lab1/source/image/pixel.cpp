@@ -1,6 +1,9 @@
 #include "image/pixel.h"
 
 template <typename T>
+ChannelOrder Pixel<T>::channel_order = ChannelOrder::RGB;
+
+template <typename T>
 Pixel<T>::Pixel(T color1, T color2, T color3)
 {
 
