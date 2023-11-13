@@ -13,7 +13,6 @@ TEST_F(BitmapTest, test_one_d_two) {
 }
 
 TEST_F(BitmapTest, test_one_e_one) {
-	BitmapImage::BitmapPixel::channel_order = ChannelOrder::RGB;
 	const auto picture_1_const = BitmapImage(1024, 1576);
 	const auto picture_2_const = BitmapImage(8192, 8192);
 

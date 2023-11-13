@@ -13,7 +13,6 @@ TEST_F(PixelTest, test_one_b) {
 }
 
 TEST_F(PixelTest, test_one_c) {
-	Pixel<std::uint8_t>::channel_order = ChannelOrder::RGB;
 	const auto pixel_small_1 = Pixel<std::uint8_t>{ 255, 255, 255 };
 	const auto pixel_small_2 = Pixel<std::uint8_t>{ 255, 255, 0 };
 	const auto pixel_small_3 = Pixel<std::uint8_t>{ 255, 0, 255 };

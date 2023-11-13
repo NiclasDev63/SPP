@@ -36,8 +36,6 @@ BitmapImage::BitmapPixel construct_pixel(const std::uint8_t red, const std::uint
 }
 
 TEST_F(IOTest, test_two_a_one) {
-	BitmapImage::BitmapPixel::channel_order = ChannelOrder::RGB;
-
 	const auto path = get_path();
 
 	ASSERT_THROW(auto val = ImageParser::read_bitmap(path), std::exception);

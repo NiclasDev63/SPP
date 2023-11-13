@@ -19,7 +19,7 @@ class Pixel
 {
 public:
 	// contains the channel order
-	static ChannelOrder channel_order;
+	inline static ChannelOrder channel_order = ChannelOrder::RGB;
 
 	// standard constructor
 	Pixel(): red(0), green(0), blue(0) {}

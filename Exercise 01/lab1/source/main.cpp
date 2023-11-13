@@ -23,7 +23,6 @@ int main(int argc, char** argv) {
 
 	CLI11_PARSE(lab_cli_app, argc, argv);
 
-	BitmapImage::BitmapPixel::channel_order = ChannelOrder::RGB;
 
 	BitmapImage img(500, 500);
 	for (int i = 0; i < 500; i++) {
@@ -34,12 +33,14 @@ int main(int argc, char** argv) {
 			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 255);
 
 			BitmapImage::BitmapPixel pixel(dist6(rng), dist6(rng), dist6(rng));
+			//BitmapImage::BitmapPixel pixel(0, 0, 0);
 
 			img.set_pixel(i, j, pixel);
 		}
 	}
 
-	ImageParser::write_bitmap(image_path, img);
+	ImageParser::write_bitmap(output_path / "test2.bmp", img);
+
 
 	//auto key = FES::key_type{};
 	//for (auto i = FES::key_type::value_type(0); i < key.size(); i++) {

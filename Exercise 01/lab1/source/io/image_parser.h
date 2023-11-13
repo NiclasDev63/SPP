@@ -74,22 +74,23 @@ public:
         return image;
     };
     static void write_bitmap(std::filesystem::path path, const BitmapImage &image) {
-        if (!filesystem::exists(path))
+          //Commented out because of unexpected exception
+  /*      if (!filesystem::exists(path))
         {
+            printf("testAA");
             throw exception();
-        }
+        }*/
 
-        ofstream file(path, ios::out | ios::binary);
+        ofstream file(path, ios::binary);
 
         const int w = image.get_width();
         const int h = image.get_height();
 
-        unsigned char* file_header = generate_bitmap_file_header(w, h);
-        unsigned char* info_header = generate_bitmap_info_header(w, h);
+        std::vector<unsigned char> file_header = generate_bitmap_file_header(w, h);
+        std::vector<unsigned char> info_header = generate_bitmap_info_header(w, h);
 
-        file.write(reinterpret_cast<char*>(file_header), FILE_HEADER_SIZE);
-        file.write(reinterpret_cast<char*>(info_header), INFORMATION_HEADER_SIZE);
-
+        file.write(reinterpret_cast<char*>(file_header.data()), FILE_HEADER_SIZE);
+        file.write(reinterpret_cast<char*>(info_header.data()), INFORMATION_HEADER_SIZE);
 
         for (int i = 0; i < w; i++) {
             for (int j = 0; j < h; j++) {
@@ -101,17 +102,12 @@ public:
         file.close();
 
     };
-    static unsigned char *generate_bitmap_file_header(BitmapImage::index_type width, BitmapImage::index_type height) {
+    static std::vector<unsigned char> generate_bitmap_file_header(BitmapImage::index_type width, BitmapImage::index_type height) {
         const int padding = ((4 - (width * 3) % 4) % 4);
 
         const int file_size = FILE_HEADER_SIZE + INFORMATION_HEADER_SIZE + (3 * width * height) + (padding * height);
 
-        unsigned char file_header[] = {
-            0, 0,       /// signature
-            0, 0, 0, 0, /// image file size in bytes
-            0, 0, 0, 0, /// reserved
-            0, 0, 0, 0, /// start of pixel array
-        };
+        std::vector<unsigned char> file_header(FILE_HEADER_SIZE, 0);
 
         file_header[0] = (unsigned char)('B');
         file_header[1] = (unsigned char)('M');
@@ -123,8 +119,9 @@ public:
 
         return file_header;
     };
-    static unsigned char *generate_bitmap_info_header(BitmapImage::index_type width, BitmapImage::index_type height) {
-        unsigned char information_header[INFORMATION_HEADER_SIZE];
+
+    static std::vector<unsigned char> generate_bitmap_info_header(BitmapImage::index_type width, BitmapImage::index_type height) {
+        std::vector<unsigned char> information_header(INFORMATION_HEADER_SIZE, 0);
 
         //Information header size
         information_header[0] = INFORMATION_HEADER_SIZE;
