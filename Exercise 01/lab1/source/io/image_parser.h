@@ -31,7 +31,7 @@ public:
         }
 
         int fileSize = fileHeader[2] + (fileHeader[3] << 8) + (fileHeader[4] << 16) + (fileHeader[5] << 24);
-        int bfOffBits = fileHeader[10];
+        int bfOffBits = fileHeader[10] + (fileHeader[11] << 8) + (fileHeader[12] << 16) + (fileHeader[13] << 24);
 
         unsigned char informationHeader[INFORMATION_HEADER_SIZE];
         file.read(reinterpret_cast<char*>(informationHeader), INFORMATION_HEADER_SIZE);
