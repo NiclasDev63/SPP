@@ -161,17 +161,17 @@ public:
         information_header[22] = 0;
         information_header[23] = 0;
 
-        //X pixels per meter (no specification)
-        information_header[24] = 0;
-        information_header[25] = 0;
-        information_header[26] = 0;
-        information_header[27] = 0;
+        //X pixels per meter (72 dpi)
+        information_header[24] = 2835;
+        information_header[25] = 2835 >> 8;
+        information_header[26] = 2835 >> 16;
+        information_header[27] = 2835 >> 24;
 
-        //Y pixels per meter (no specification)
-        information_header[28] = 0;
-        information_header[29] = 0;
-        information_header[30] = 0;
-        information_header[31] = 0;
+        //Y pixels per meter (72 dpi)
+        information_header[28] = 2835;
+        information_header[29] = 2835 >> 8;
+        information_header[30] = 2835 >> 16;
+        information_header[31] = 2835 >> 24;
 
         //Colors used (no color palette)
         information_header[32] = 0;
