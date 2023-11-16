@@ -92,6 +92,11 @@ public:
 
         ofstream file(path, ios::binary);
 
+        if (!file.is_open())
+        {
+            throw exception();
+        }
+
         const int w = image.get_width();
         const int h = image.get_height();
 
