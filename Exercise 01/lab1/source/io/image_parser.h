@@ -61,9 +61,9 @@ public:
         unsigned char red, green, blue;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                file.read(reinterpret_cast<char*>(&red), 1);
-                file.read(reinterpret_cast<char*>(&green), 1);
                 file.read(reinterpret_cast<char*>(&blue), 1);
+                file.read(reinterpret_cast<char*>(&green), 1);
+                file.read(reinterpret_cast<char*>(&red), 1);
                 Pixel pixel(red, green, blue);
                 image.set_pixel(x, y, pixel);
             }
@@ -92,10 +92,14 @@ public:
         file.write(reinterpret_cast<char*>(file_header.data()), FILE_HEADER_SIZE);
         file.write(reinterpret_cast<char*>(info_header.data()), INFORMATION_HEADER_SIZE);
 
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
-                Pixel pixel = image.get_pixel(i, j);
-                BitmapImage::index_type color[] = { pixel.get_red_channel(),  pixel.get_green_channel(),  pixel.get_blue_channel()};
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                Pixel pixel = image.get_pixel(j, i);
+                unsigned char r = pixel.get_red_channel();
+                unsigned char g = pixel.get_green_channel();
+                unsigned char b = pixel.get_blue_channel();
+
+                unsigned char color[] = {b, g, r};
                 file.write(reinterpret_cast<char*>(color), 3);
             }
         }
@@ -161,17 +165,17 @@ public:
         information_header[22] = 0;
         information_header[23] = 0;
 
-        //X pixels per meter (no specification)
-        information_header[24] = 0;
-        information_header[25] = 0;
-        information_header[26] = 0;
-        information_header[27] = 0;
+        //X pixels per meter (72 dpi)
+        information_header[24] = 2835;
+        information_header[25] = 2835 >> 8;
+        information_header[26] = 2835 >> 16;
+        information_header[27] = 2835 >> 24;
 
-        //Y pixels per meter (no specification)
-        information_header[28] = 0;
-        information_header[29] = 0;
-        information_header[30] = 0;
-        information_header[31] = 0;
+        //Y pixels per meter (72 dpi)
+        information_header[28] = 2835;
+        information_header[29] = 2835 >> 8;
+        information_header[30] = 2835 >> 16;
+        information_header[31] = 2835 >> 24;
 
         //Colors used (no color palette)
         information_header[32] = 0;

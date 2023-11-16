@@ -13,7 +13,7 @@ public:
     using BitmapPixel = Pixel<uint8_t>;
     using index_type = int16_t;
 
-    BitmapImage(index_type height = 0, index_type width = 0) {
+    BitmapImage(index_type height = 0, index_type width = 0) {      //Are you allowed to do this?
         if (height == 0 || height > 8192 || width == 0 || width > 8192)
         {
             throw exception();
