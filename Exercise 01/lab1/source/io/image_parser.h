@@ -61,10 +61,10 @@ public:
         unsigned char red, green, blue;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                file.read(reinterpret_cast<char*>(&red), 1);
-                file.read(reinterpret_cast<char*>(&green), 1);
                 file.read(reinterpret_cast<char*>(&blue), 1);
-                Pixel pixel(red, green, blue);
+                file.read(reinterpret_cast<char*>(&green), 1);
+                file.read(reinterpret_cast<char*>(&red), 1);
+                Pixel pixel(blue, green, red);
                 image.set_pixel(x, y, pixel);
             }
             file.ignore(padding);
@@ -75,7 +75,7 @@ public:
     };
     static void write_bitmap(std::filesystem::path path, const BitmapImage &image) {
           //Commented out because of unexpected exception
-  /*      if (!filesystem::exists(path))
+        /*if (!filesystem::exists(path))
         {
             printf("testAA");
             throw exception();
@@ -92,10 +92,10 @@ public:
         file.write(reinterpret_cast<char*>(file_header.data()), FILE_HEADER_SIZE);
         file.write(reinterpret_cast<char*>(info_header.data()), INFORMATION_HEADER_SIZE);
 
-        for (int i = 0; i < w; i++) {
-            for (int j = 0; j < h; j++) {
-                Pixel pixel = image.get_pixel(i, j);
-                BitmapImage::index_type color[] = { pixel.get_red_channel(),  pixel.get_green_channel(),  pixel.get_blue_channel()};
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                Pixel pixel = image.get_pixel(x, y);
+                BitmapImage::index_type color[] = { pixel.get_blue_channel(), pixel.get_green_channel(), pixel.get_red_channel()};
                 file.write(reinterpret_cast<char*>(color), 3);
             }
         }

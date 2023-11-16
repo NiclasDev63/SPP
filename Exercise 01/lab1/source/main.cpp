@@ -25,21 +25,21 @@ int main(int argc, char** argv) {
 
 
 	BitmapImage img(500, 500);
-	for (int i = 0; i < 500; i++) {
-		for (int j = 0; j < 500; j++) {
+	for (int y = 0; y < 500; y++) {
+		for (int x = 0; x < 500; x++) {
 
 			std::random_device dev;
 			std::mt19937 rng(dev());
 			std::uniform_int_distribution<std::mt19937::result_type> dist6(0, 255);
 
-			BitmapImage::BitmapPixel pixel(dist6(rng), dist6(rng), dist6(rng));
-			//BitmapImage::BitmapPixel pixel(0, 0, 0);
+			//BitmapImage::BitmapPixel pixel(dist6(rng), dist6(rng), dist6(rng));
+			BitmapImage::BitmapPixel pixel(0, 255, 0);
 
-			img.set_pixel(i, j, pixel);
+			img.set_pixel(x, y, pixel);
 		}
 	}
 
-	ImageParser::write_bitmap(output_path / "test2.bmp", img);
+	ImageParser::write_bitmap(output_path / "test.bmp", img);
 
 
 	//auto key = FES::key_type{};

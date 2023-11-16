@@ -19,17 +19,17 @@ class Pixel
 {
 public:
 	// contains the channel order
-	inline static ChannelOrder channel_order = ChannelOrder::RGB;
+	inline static ChannelOrder channel_order = ChannelOrder::BGR;
 
 	// standard constructor
-	Pixel(): red(0), green(0), blue(0) {}
+	Pixel(): blue(0), green(0), red(0) {}
 
-	Pixel(T red, T green, T blue) : red(red), green(green), blue(blue) {}
+	Pixel(T blue, T green, T red) : blue(blue), green(green), red(red) {}
 
 	// returns the intensitiy of the respective color
+	[[nodiscard]] T get_blue_channel() const noexcept { return blue; };
 	[[nodiscard]] T get_green_channel() const noexcept { return green; };
 	[[nodiscard]] T get_red_channel() const noexcept { return red; };
-	[[nodiscard]] T get_blue_channel() const noexcept { return blue; };
 
 	// overload the "==" operator
 	bool operator==(const Pixel &other) const {
