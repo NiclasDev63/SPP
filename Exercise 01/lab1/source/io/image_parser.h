@@ -12,8 +12,8 @@ public:
     static void write_bitmap(std::filesystem::path path, const BitmapImage &image);
     static unsigned char *generate_bitmap_file_header(BitmapImage::index_type height, BitmapImage image);
     static unsigned char *generate_bitmap_info_header(BitmapImage::index_type width, BitmapImage::index_type height);
-=======
-    static BitmapImage read_bitmap(std::filesystem::path path)
+    == == == =
+                 static BitmapImage read_bitmap(std::filesystem::path path)
     {
         if (!filesystem::exists(path))
         {
@@ -101,6 +101,8 @@ public:
         file.write(reinterpret_cast<char *>(file_header.data()), FILE_HEADER_SIZE);
         file.write(reinterpret_cast<char *>(info_header.data()), INFORMATION_HEADER_SIZE);
 
+        const int padding = ((4 - (width * 3) % 4) % 4);
+
         for (int i = 0; i < w; i++)
         {
             for (int j = 0; j < h; j++)
@@ -109,9 +111,9 @@ public:
                 BitmapImage::index_type color[] = {pixel.get_red_channel(), pixel.get_green_channel(), pixel.get_blue_channel()};
                 file.write(reinterpret_cast<char *>(color), 3);
             }
+            // write padding for each row
+            file.write(reinterpret_cast<char *>(&padding), padding);
         }
-
-        const int padding = ((4 - (width * 3) % 4) % 4);
 
         file.close();
     };
