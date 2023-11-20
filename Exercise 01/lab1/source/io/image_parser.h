@@ -95,8 +95,12 @@ public:
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 Pixel pixel = image.get_pixel(x, y);
-                BitmapImage::index_type color[] = { pixel.get_blue_channel(), pixel.get_green_channel(), pixel.get_red_channel()};
-                file.write(reinterpret_cast<char*>(color), 3);
+                BitmapImage::index_type blue = pixel.get_blue_channel();
+                BitmapImage::index_type green = pixel.get_green_channel();
+                BitmapImage::index_type red = pixel.get_red_channel();
+                file.write(reinterpret_cast<char*>(&blue), 1);
+                file.write(reinterpret_cast<char*>(&green), 1);
+                file.write(reinterpret_cast<char*>(&red), 1);
             }
         }
         file.close();
@@ -161,17 +165,29 @@ public:
         information_header[22] = 0;
         information_header[23] = 0;
 
-        //X pixels per meter (72 dpi)
-        information_header[24] = 2835;
-        information_header[25] = 2835 >> 8;
-        information_header[26] = 2835 >> 16;
-        information_header[27] = 2835 >> 24;
+        ////X pixels per meter (72 dpi)
+        //information_header[24] = 2835;
+        //information_header[25] = 2835 >> 8;
+        //information_header[26] = 2835 >> 16;
+        //information_header[27] = 2835 >> 24;
 
-        //Y pixels per meter (72 dpi)
-        information_header[28] = 2835;
-        information_header[29] = 2835 >> 8;
-        information_header[30] = 2835 >> 16;
-        information_header[31] = 2835 >> 24;
+        ////Y pixels per meter (72 dpi)
+        //information_header[28] = 2835;
+        //information_header[29] = 2835 >> 8;
+        //information_header[30] = 2835 >> 16;
+        //information_header[31] = 2835 >> 24;
+
+        //X pixels per meter (96 dpi)
+        information_header[24] = 0 ;
+        information_header[25] = 0 ;
+        information_header[26] = 0 ;
+        information_header[27] = 0 ;
+
+        //Y pixels per meter (96 dpi)
+        information_header[28] = 0 ;
+        information_header[29] = 0 ;
+        information_header[30] = 0 ;
+        information_header[31] = 0 ;
 
         //Colors used (no color palette)
         information_header[32] = 0;
