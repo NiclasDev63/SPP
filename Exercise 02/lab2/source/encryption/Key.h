@@ -14,13 +14,13 @@ public:
 	
 	[[nodiscard]] static std::uint64_t hash(key_type key) noexcept;
 
-	[[nodiscard]] static std::uint64_t get_smallest_hash(std::span<key_type> keys) noexcept;
+	[[nodiscard]] static std::uint64_t get_smallest_hash(std::span<const key_type> keys) noexcept;
 
-	[[nodiscard]] static std::uint64_t get_smallest_hash_parallel(std::span<key_type> keys, const int num_threads = 1) noexcept;
+	[[nodiscard]] static std::uint64_t get_smallest_hash_parallel(std::span<const key_type> keys, const int num_threads = 1) noexcept;
 
-	[[nodiscard]] static std::uint64_t find_key(std::span<key_type> keys, std::uint64_t reference_hash) noexcept;
+	[[nodiscard]] static key_type find_key(std::span<const key_type> keys, std::uint64_t reference_hash) noexcept;
 
-	[[nodiscard]] static std::uint64_t find_key_parallel(std::span<key_type> keys, std::uint64_t reference_hash, const int num_threads = 1) noexcept;
+	[[nodiscard]] static key_type find_key_parallel(std::span<const key_type> keys, std::uint64_t reference_hash, const int num_threads = 1) noexcept;
 
 
 private:
