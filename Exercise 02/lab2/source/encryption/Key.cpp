@@ -99,11 +99,11 @@ Key::key_type Key::find_key_parallel(std::span<const key_type> keys, std::uint64
     #pragma omp parallel for num_threads(num_threads)
         for (auto i = std::size_t(0); i < keys.size(); i++) {
             auto hash = Key::hash(keys[i]);
-                if(hash == reference_hash)
-                {
+            if(hash == reference_hash)
+            {
                 #pragma omp critical
-                    result_key = keys[i];
-                }
+                result_key = keys[i];
+            }
     }
 
     return result_key;
