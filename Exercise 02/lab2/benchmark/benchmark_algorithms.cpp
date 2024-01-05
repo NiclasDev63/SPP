@@ -38,22 +38,41 @@ static bool check_image_equality(const BitmapImage& first, const BitmapImage& se
 
 static void benchmark_two_a_one(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
+	const auto key = Key::get_standard_key();
+	const auto& image = Holder::get_square_image();
 	for (auto _ : state) {
+		const auto val = FES::encrypt_parallel_coarse(image, Key::get_standard_key(), number_threads);
+		benchmark::DoNotOptimize(val);
+	}
+
+	const auto serial_answer = FES::encrypt(image, Key::get_standard_key());
+	const auto parallel_answer = FES::encrypt_parallel_coarse(image, Key::get_standard_key(), number_threads);
+
+	if (!check_image_equality(serial_answer, parallel_answer)) {
+		std::cerr << "Serial and parallel answers don't match!\n";
 	}
 }
 
 static void benchmark_two_a_two(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
 	for (auto _ : state) {
 	}
 }
 
 static void benchmark_two_b_one(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
+	const auto key = Key::get_standard_key();
+	const auto& image = Holder::get_square_image();
 	for (auto _ : state) {
+		const auto val = FES::encrypt_parallel_fine(image, Key::get_standard_key(), number_threads);
+		benchmark::DoNotOptimize(val);
+	}
+
+	const auto serial_answer = FES::encrypt(image, Key::get_standard_key());
+	const auto parallel_answer = FES::encrypt_parallel_fine(image, Key::get_standard_key(), number_threads);
+
+	if (!check_image_equality(serial_answer, parallel_answer)) {
+		std::cerr << "Serial and parallel answers don't match!\n";
 	}
 }
 
@@ -66,8 +85,18 @@ static void benchmark_two_b_two(benchmark::State& state) {
 
 static void benchmark_two_c_one(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
+	const auto key = Key::get_standard_key();
+	const auto& image = Holder::get_square_image();
 	for (auto _ : state) {
+		const auto val = FES::encrypt_parallel(image, key, number_threads);
+		benchmark::DoNotOptimize(val);
+	}
+
+	const auto serial_answer = FES::encrypt(image, Key::get_standard_key());
+	const auto parallel_answer = FES::encrypt_parallel(image, Key::get_standard_key(), number_threads);
+
+	if (!check_image_equality(serial_answer, parallel_answer)) {
+		std::cerr << "Serial and parallel answers don't match!\n";
 	}
 }
 
@@ -98,14 +127,23 @@ static void benchmark_two_d_one(benchmark::State& state) {
 
 static void benchmark_two_e_one(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
+	const auto& image = Holder::get_square_image();
 	for (auto _ : state) {
+		const auto val = image.get_grayscale_parallel(number_threads);
+		benchmark::DoNotOptimize(val);
+	}
+
+	const auto serial_answer = image.get_grayscale();
+	const auto parallel_answer = image.get_grayscale_parallel(number_threads);
+
+	if (!check_image_equality(serial_answer, parallel_answer)) {
+		std::cerr << "Serial and parallel answers don't match!\n";
 	}
 }
 
 static void benchmark_two_f_one(benchmark::State& state) {
 	const auto number_threads = state.range(0);
-
+	
 	for (auto _ : state) {
 	}
 }

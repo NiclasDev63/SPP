@@ -26,17 +26,17 @@ BitmapImage FES::encrypt_parallel_coarse(const BitmapImage& original_image, cons
 
 	auto encrypted_image = BitmapImage{ height, width };
 
-	#pragma omp parallel for num_threads(num_threads)
-		for (auto y = std::uint32_t(0); y < height; y += 3) {
-			for (auto x = std::uint32_t(0); x < width; x += 48) {
-				const auto& current_block = get_block(y, x, original_image);
-				const auto& previous_block = get_previous_block(y, x, encryption_key, original_image);
+	#pragma omp parallel for collapse(2) num_threads(num_threads)
+	for (auto y = std::uint32_t(0); y < height; y += 3) {
+		for (auto x = std::uint32_t(0); x < width; x += 48) {
+			const auto& current_block = get_block(y, x, original_image);
+			const auto& previous_block = get_previous_block(y, x, encryption_key, original_image);
 
-				const auto& encrypted_block = encrypt_block(current_block, previous_block);
+			const auto& encrypted_block = encrypt_block(current_block, previous_block);
 
-				set_block(y, x, encrypted_block, encrypted_image);
-			}
+			set_block(y, x, encrypted_block, encrypted_image);
 		}
+	}
 
 	return encrypted_image;
 }
@@ -47,8 +47,8 @@ BitmapImage FES::encrypt_parallel_fine(const BitmapImage& original_image, const 
 
 	auto encrypted_image = BitmapImage{ height, width };
 
+	#pragma omp parallel for collapse(2) num_threads(num_threads)
 	for (auto y = std::uint32_t(0); y < height; y += 3) {
-		#pragma omp parallel for num_threads(num_threads)
 			for (auto x = std::uint32_t(0); x < width; x += 48) {
 				const auto& current_block = get_block(y, x, original_image);
 				const auto& previous_block = get_previous_block(y, x, encryption_key, original_image);

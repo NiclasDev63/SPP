@@ -51,27 +51,6 @@ std::uint64_t Key::get_smallest_hash_parallel(std::span<const key_type> keys,  c
 		return std::numeric_limits<std::uint64_t>::max();
 	}
 	auto smallest_hash = Hash::hash(keys[0][0]);
-	// #pragma omp parallel for collapse(2) num_threads(num_threads) reduction(min: smallest_hash)
-	// #pragma omp parallel
-	// {
-	// 	std::uint64_t local_smallest_hash = std::numeric_limits<std::uint64_t>::max();
-	// 	#pragma for collapse(2) num_threads(num_threads)
-	// 	for (auto i = std::size_t(0); i < keys.size(); i++) {
-	// 		for(auto j = std::size_t(0); j < keys[i].size(); j++) {
-	// 			auto hash = Hash::hash(keys[i][j]);
-	// 			#pragma omp critical 
-	// 			if(hash < local_smallest_hash) {
-	// 				local_smallest_hash = hash;
-	// 			}
-	// 		}
-	// 	}
-	// 	#pragma omp critical
-	// 	{
-	// 		if(local_smallest_hash < smallest_hash) {
-	// 			smallest_hash = local_smallest_hash;
-	// 		}
-	// 	}
-	// }
    #pragma omp parallel for num_threads(num_threads) reduction(min: smallest_hash)
         for (auto i = std::size_t(0); i < keys.size(); i++) {
             auto hash = Key::hash(keys[i]);
