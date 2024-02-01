@@ -12,6 +12,7 @@ enable_language(CUDA)
 
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
+include_directories(${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES}) 
 
 # project options
 add_library(project_options INTERFACE)

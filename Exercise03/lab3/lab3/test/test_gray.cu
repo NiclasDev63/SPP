@@ -23,7 +23,7 @@ bool test_two_b_adapter(const Pixel<std::uint8_t>* const input, Pixel<std::uint8
 	auto thread_dim = dim3{ 32, 32, 1 };
 	auto block_dim = dim3{ divup(width, 32), divup(height, 32), 1 };
 
-	grayscale_kernel << <thread_dim, block_dim, GRAYSCALE_SHARED_MEM >> > (source_pixel_dev, destination_pixel_dev, width, height);
+	grayscale_kernel << <block_dim, thread_dim, GRAYSCALE_SHARED_MEM >> > (source_pixel_dev, destination_pixel_dev, width, height);
 
 	cudaMemcpy(output, destination_pixel_dev, raw_size, cudaMemcpyDeviceToHost);
 

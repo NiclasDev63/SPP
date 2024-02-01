@@ -24,14 +24,13 @@
 // Hier beispielsweise mit atomicAdd, vergleiche https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#arithmetic-functions
 template<class T1>
 __device__ T1 atomicAdd(T1* x, T1 y);
+__host__ __device__  unsigned int divup(unsigned int n, unsigned int d);
 #endif
-
-__host__ __device__ unsigned int divup(unsigned int n, unsigned int d) {
-    return (n + d - 1) / d;
-}
 
 #define GRAYSCALE_SHARED_MEM 0
 #define HASH_SHARED_MEM 0
 #define FLAT_HASH_SHARED_MEM 0
 #define FIND_HASH_SHARED_MEM 0
 #define HASH_SCHEMES_SHARED_MEM 0
+
+static __inline unsigned int divup(int a, int b) { return (a + b - 1) / b; }
