@@ -6,6 +6,8 @@
 #include "image/bitmap_image.h"
 #include "Key.h"
 #include "FES.h"
+#include "util/Hash.h"
+#include <string>
 
 
 enum EncryptionStep {
@@ -22,10 +24,10 @@ std::uint64_t encode(const EncryptionScheme& scheme) {
 
     for (std::size_t i = 0; i < scheme.size(); ++i) {
         switch (scheme[i]) {
-            case E: break; // 00
-            case D: result |= (1ULL << (2 * i)); break; // 01
-            case K: result |= (2ULL << (2 * i)); break; // 10
-            case T: result |= (3ULL << (2 * i)); break; // 11
+            case EncryptionStep::E: break; // 00
+            case EncryptionStep::D: result |= (1ULL << (2 * i)); break; // 01
+            case EncryptionStep::K: result |= (2ULL << (2 * i)); break; // 10
+            case EncryptionStep::T: result |= (3ULL << (2 * i)); break; // 11
         }
     }
 
@@ -48,10 +50,10 @@ EncryptionScheme decode(std::uint64_t code) {
         std::uint64_t bits = (code >> (2 * i)) & 3;
 
         switch (bits) {
-            case 0: scheme[i] = E; break; // 00
-            case 1: scheme[i] = D; break; // 01
-            case 2: scheme[i] = K; break; // 10
-            case 3: scheme[i] = T; break; // 11
+            case 0: scheme[i] = EncryptionStep::E; break; // 00
+            case 1: scheme[i] = EncryptionStep::D; break; // 01
+            case 2: scheme[i] = EncryptionStep::K; break; // 10
+            case 3: scheme[i] = EncryptionStep::T; break; // 11
             default: throw std::exception();
         }
     }
@@ -70,7 +72,7 @@ BitmapImage perform_scheme(BitmapImage image, Key::key_type key, const Encryptio
                 image = FES::decrypt(image, key); 
                 break;
             case T: 
-                image.transpose(); 
+                image = image.transpose(); 
                 break;
             case K: 
                 key = Key::produce_new_key(key); 
@@ -78,4 +80,22 @@ BitmapImage perform_scheme(BitmapImage image, Key::key_type key, const Encryptio
         }
     }
     return image;
+}
+
+EncryptionScheme retrieve_scheme(std::uint64_t hash) {
+
+    const auto total_schemes = pow(4, 10);
+
+    for (std::uint64_t i = 0; i < total_schemes; i++) {
+        auto current_value = i;
+
+        current_value |= current_value << 32;
+
+        auto current_scheme = decode(current_value);
+
+        auto current_hash = Hash::hash(encode(current_scheme));
+
+        if (current_hash == hash)
+            return current_scheme;
+    }
 }

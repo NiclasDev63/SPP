@@ -33,4 +33,4 @@ __host__ __device__  unsigned int divup(unsigned int n, unsigned int d);
 #define FIND_HASH_SHARED_MEM 0
 #define HASH_SCHEMES_SHARED_MEM 0
 
-static __inline unsigned int divup(int a, int b) { return (a + b - 1) / b; }
+static __inline unsigned int divup(unsigned int n, unsigned int d) { return (n + d - 1) / d; }
