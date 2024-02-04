@@ -10,19 +10,22 @@ __global__ void grayscale_kernel(const Pixel<std::uint8_t>* const input, Pixel<s
     unsigned int x = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int y = blockIdx.y * blockDim.y + threadIdx.y;
 
+
     if (x < width && y < height) {
+
         unsigned int index = y * width + x;
+
         Pixel<std::uint8_t> pixel = input[index];
-        Pixel<std::uint8_t>* pixelPtr = &pixel;
-        auto* r = reinterpret_cast<std::uint8_t*>(pixelPtr);
-        auto* g = reinterpret_cast<std::uint8_t*>(pixelPtr + 1);
-        auto* b = reinterpret_cast<std::uint8_t*>(pixelPtr + 2);
+
+        auto* rgb = reinterpret_cast<std::uint8_t*>(&pixel);
 
         // Calculate the grayscale value
-        const auto gray = *r * 0.2989 + *g * 0.5870 + *b * 0.1140;
+        const auto gray = rgb[0] * 0.2989 + rgb[1] * 0.5870 + rgb[2] * 0.1140;
         auto gray_converted = static_cast<std::uint8_t>(gray);
 
-        output[index] = reinterpret_cast<Pixel<std::uint8_t>&>(gray_converted, gray_converted, gray_converted);
+        std::uint8_t grays[] = {gray_converted, gray_converted, gray_converted};
+        
+        output[index] = reinterpret_cast<Pixel<std::uint8_t>&>(grays);
     }
 }
 
