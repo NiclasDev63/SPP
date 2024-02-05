@@ -8,7 +8,7 @@
 #include "FES.h"
 #include "util/Hash.h"
 #include <string>
-
+#include <cmath>
 
 enum EncryptionStep {
     E,
@@ -98,4 +98,7 @@ EncryptionScheme retrieve_scheme(std::uint64_t hash) {
         if (current_hash == hash)
             return current_scheme;
     }
+
+    auto scheme = decode(0);
+    return scheme;
 }
