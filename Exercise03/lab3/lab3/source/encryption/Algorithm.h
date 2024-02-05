@@ -9,6 +9,7 @@
 #include "util/Hash.h"
 #include <string>
 #include <cmath>
+#include <stdexcept>
 
 enum EncryptionStep {
     E,
@@ -99,6 +100,6 @@ EncryptionScheme retrieve_scheme(std::uint64_t hash) {
             return current_scheme;
     }
 
-    auto scheme = decode(0);
-    return scheme;
+    throw std::runtime_error("Scheme could not be retrieved");
+
 }
